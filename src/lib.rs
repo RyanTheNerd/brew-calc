@@ -12,16 +12,23 @@ pub fn sug_to_abv(sugar_content: f64, vol: f64) -> f64 {
 
     // One Sugar molecule releases 2 alcohol molecules
     let mass_alcohol = mols_sug * 2.0 * crate::molar_mass::ALCOHOL;
-   
+
     // Convert to ML by dividing by the density
     let vol_alcohol = mass_alcohol / crate::DENSITY_OF_ALCOHOL;
 
-    // Ratio of fluid alcohol to total liquid, +-0.5%
-    vol_alcohol/vol
+    // Percent Alcohol by Volume, +-0.5%
+    (vol_alcohol/vol) * 100.0
 }
 
-pub fn brix_to_abv(brix: f64, vol: f64) -> f64 {
-    sug_to_abv(vol/100.0 * brix, vol)
+pub fn brix_to_abv(brix: f64) -> f64 {
+    return sug_to_abv(brix, 100.0);
+}
+
+pub fn abv_to_brix(abv: f64) -> f64 {
+    let abm = abv * crate::DENSITY_OF_ALCOHOL;
+    let mols_alcohol = abm / crate::molar_mass::ALCOHOL;
+    let brix = mols_alcohol / 2.0 * crate::molar_mass::SUGAR;
+    return brix;
 }
 
 pub fn boost_brix(vol: f64, brix: f64, target_brix: f64) -> f64 {
@@ -32,6 +39,5 @@ pub fn boost_brix(vol: f64, brix: f64, target_brix: f64) -> f64 {
     let brix_diff = target_brix - brix;
 
     // Sugar required to boost brix
-    brix_diff * multiplier
+    return brix_diff * multiplier
 }
-

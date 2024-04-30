@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "brix_to_abv"
+name = "brew_calc"
 version = "0.1.0"
